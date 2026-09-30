@@ -11,7 +11,7 @@ export const CONVAI_DASHBOARD_URL = 'https://convai.com/pipeline';
 export const CONVAI_PRICING_URL = 'https://convai.com/pricing';
 export const CONVAI_DOCS_URL = 'https://docs.convai.com/api-docs';
 export const CONVAI_SDK_URL = 'https://www.npmjs.com/package/@convai/web-sdk/v/1.6.0-beta.3';
-export const REPO_URL = 'https://github.com/AkshitIreddy/convai-desktop-pet';
+export const REPO_URL = 'https://github.com/alystria-ai/AI-Desktop-Pet';
 export const LATEST_RELEASE_URL = `${REPO_URL}/releases/latest`;
 
 export const DEFAULT_SKILL_LOADOUT: SkillId[] = [

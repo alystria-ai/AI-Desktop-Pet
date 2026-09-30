@@ -8,7 +8,7 @@ design bible for this codebase.
 
 | Requirement | Notes |
 |---|---|
-| **Node.js 20+** | with npm (a `package-lock.json` is committed — use `npm ci` for clean installs) |
+| **Node.js 22.14+** | with npm (a `package-lock.json` is committed — use `npm ci` for clean installs) |
 | **Rust 1.88+** | install via [rustup](https://rustup.rs); the stable toolchain is all you need |
 | **Windows** | WebView2 runtime — ships with Windows 11 (and most updated Windows 10 installs), nothing to do. You'll also want the *Desktop development with C++* workload from Visual Studio Build Tools for the MSVC linker. |
 | **Linux** | `sudo apt install libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf libasound2-dev build-essential` (Debian/Ubuntu names; see the [Tauri prerequisites](https://tauri.app/start/prerequisites/) for other distros) |
@@ -17,9 +17,9 @@ design bible for this codebase.
 ## Develop
 
 ```bash
-git clone https://github.com/AkshitIreddy/convai-desktop-pet.git
-cd convai-desktop-pet
-npm install
+git clone https://github.com/alystria-ai/AI-Desktop-Pet.git
+cd AI-Desktop-Pet
+npm ci
 npm run tauri dev
 ```
 
@@ -66,18 +66,23 @@ catalog, Convai integration — in [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md
 Releases are fully automated by [.github/workflows/build.yml](./.github/workflows/build.yml)
 (tauri-action, three-OS matrix, one combined release).
 
-1. Bump the version in **all three** places (they must match):
+1. Bump the version in **all three** manifests (they must match), and update
+   the root package versions in `package-lock.json` and `src-tauri/Cargo.lock`:
    - `package.json` → `version`
    - `src-tauri/tauri.conf.json` → `version`
    - `src-tauri/Cargo.toml` → `version`
-2. Commit, then tag and push:
+2. Run `npm test` and `npm run build`, commit, then push the commit before the tag:
 
    ```bash
    git tag v2.x.x
+   git push origin master
    git push origin v2.x.x
    ```
 
-3. CI builds Windows (.exe), macOS (.dmg, Apple Silicon + Intel) and Linux
-   (.deb + .AppImage) and publishes a single GitHub release named
-   `Convai Desktop Pets v2.x.x` with every artifact attached. No repo secrets
-   to configure — the workflow uses the automatic `GITHUB_TOKEN`.
+3. CI checks the version against the tag, runs the tests, and builds Windows
+   (.exe), macOS (.dmg, Apple Silicon + Intel) and Linux (.deb + .AppImage).
+   It publishes a single GitHub release named `Convai Desktop Pets v2.x.x`
+   only after all five installers are uploaded. Each release includes
+   `SHA256SUMS.txt`, commit-based notes, and the exact source commit.
+   Failed builds leave the release as a draft. No repo secrets to configure —
+   the workflow uses the automatic `GITHUB_TOKEN`.
